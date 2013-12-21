@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>abc</title>
+	<meta content="text/html" charset="utf-8">
+    <style type="text/css">
+        .tilte{
+            height: 25px;
+            line-height: 25px;
+            background: #42a85b;
+            border: 1px solid #61a977;
+        }
+        .tilte .lable{
+            color:#fff;
+            padding-left: 20px;
+            font-weight: bold;
+            font-family: arial;
+        }
+        #bd{
+            background: #fff;
+            border:1px solid #61a977 ;
+        }
+        .content{
+            padding: 5% 0;
+            width:80%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .content img{
+            max-width: 80%;
+        }
+        .arrow{
+           width: 16px;
+           height: 32px;
+        }
+        .clearfix:after {
+            visibility: hidden;
+            display: block;
+            font-size: 0;
+            content: " ";
+            clear: both;
+            height: 0;
+        }
+        .op{
+            margin-top: 5%;
+        }
+        .pre{
+            float: left;
+            background: url(/static/img/pre.png) no-repeat;
+        }
+        .next{
+            float: right;
+            background: url(/static/img/next.png) no-repeat;
+        }
+    </style>
+</head>
+<body>
+{strip}
+<div id="doc">
+    <div id="hd">
+      <div class="tilte">
+          <span class="lable">abc</span>
+      </div>
+    </div>
+    <div id="bd">
+       <div class="content">
+           <img src="/static/img/a.jpg"/>
+           <div class="op clearfix">
+               <a href="###" class="arrow pre"></a>
+               <a href="###" class="arrow next"></a>
+           </div>
+       </div>
+    </div>
+</div>
+{/strip}
+</body>
+</html>
