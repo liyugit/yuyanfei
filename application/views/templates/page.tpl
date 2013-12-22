@@ -6,6 +6,23 @@
 	<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width",height="device-height" name="viewport" />
 	<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 	<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+	<style type="text/css">
+	.comment-page,
+	.detail-page{
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background: #fff;
+	}
+	.detail-page{
+		z-index: 10;
+	}
+	.comment-page{
+		z-index: 11;
+	}
+	</style>
 </head>
 <body>
 <ul  id="aticleList" class="list list-group">
@@ -16,7 +33,7 @@
 <div class="detail-page" style="display:none">
 	<ul id="commentList" class="list list-group">
 		<li class="list-group-item"><h1>标题</h1></li>
-		<li class="list-group-item">得得得</li>
+		<li class="list-group-item comment">得得得</li>
 		<li class="list-group-item">对方的所发生的</li>
 	</ul>
 </div>
@@ -24,7 +41,7 @@
 	<div class="jumbotron">
   		<div class="container">
   		<h1>标题</h1>	
-    	<p>随碟附送发生的身份的所得税大风随碟附送发生的身份的所得税大风随碟附送发生的身份的所得税大风随碟附送发生的身份的所得税大风随碟附送发生的身份的所得税大风</p>
+    	<p id="comment">随碟附送发生的身份的所得税大风随碟附送发生的身份的所得税大风随碟附送发生的身份的所得税大风随碟附送发生的身份的所得税大风随碟附送发生的身份的所得税大风</p>
   		</div>
 	</div>
 </div>
@@ -46,13 +63,21 @@
 				title = me.attr("title-str");
 				result.push('<li class="list-group-item"><h1>' + title + '</h1></li>');
 				$(data).each(function(i,d){
-					result.push('<li class="list-group-item comment" title="' + title + '" des="' + d.detail  + '">' + d.sun + '</li>');
+					result.push('<li class="list-group-item comment" title-str="' + title + '" des="' + d.detail  + '">' + d.sun + '</li>');
 				});
 				commentList.html(result.join(""));
 				detailPage.show();
 			});
 		});	
-		$commentList
+		$("#commentList").delegate(".comment","click",function(e){
+			var commentPage = $("#commentPage"),
+				comment = $("#comment"),
+				commentTitle = commentPage.find("h1"),
+				me = $(this);
+			commentTitle.html(me.attr("title-str"));
+			comment.html(me.attr("des"));
+			commentPage.show();
+		});
 	})();
 </script>
 </body>
