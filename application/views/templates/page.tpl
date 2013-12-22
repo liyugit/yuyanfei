@@ -10,7 +10,7 @@
 <body>
 <ul  id="aticleList" class="list list-group">
 	{foreach $list as $item}
-	<li class="list-group-item" data ='{$item.content}'>{$item.title}</li>
+	<li class="list-group-item" title-str="{$item.title}">{$item.title}<span class="data" style="display:none">{$item.content}</span></li>
 	{/foreach}
 </ul>
 <div class="detail-page" style="display:none">
@@ -28,6 +28,8 @@
   		</div>
 	</div>
 </div>
+<div id="debug">
+</div>
 <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script type="text/javascript">
@@ -39,9 +41,9 @@
 		aticleLists.each(function(i,item){
 			var me = $(this);
 			me.click(function(e){
-				var data = jQuery.parseJSON(me.attr("data")),
+				var data = jQuery.parseJSON(me.find(".data").html()),
 				result = [],
-				title = me.html();
+				title = me.attr("title-str");
 				result.push('<li class="list-group-item"><h1>' + title + '</h1></li>');
 				$(data).each(function(i,d){
 					result.push('<li class="list-group-item comment" title="' + title + '" des="' + d.detail  + '">' + d.sun + '</li>');
@@ -50,7 +52,7 @@
 				detailPage.show();
 			});
 		});	
-
+		$commentList
 	})();
 </script>
 </body>
