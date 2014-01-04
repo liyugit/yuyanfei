@@ -22,6 +22,12 @@
 	.comment-page{
 		z-index: 11;
 	}
+	.btn-primary{
+		position: absolute;
+		right: 10px;
+		top: 0;
+		z-index: 14;
+	}
 	</style>
 </head>
 <body>
@@ -31,6 +37,7 @@
 	{/foreach}
 </ul>
 <div class="detail-page" style="display:none">
+	<button type="button" class="btn btn-primary">返回</button>
 	<ul id="commentList" class="list list-group">
 		<li class="list-group-item"><h1>标题</h1></li>
 		<li class="list-group-item comment">得得得</li>
@@ -38,6 +45,7 @@
 	</ul>
 </div>
 <div class="comment-page" id="commentPage" style="display:none">
+	<button type="button" class="btn btn-primary">返回</button>
 	<div class="jumbotron">
   		<div class="container">
   		<h1>标题</h1>	
@@ -78,6 +86,10 @@
 			comment.html(me.attr("des"));
 			commentPage.show();
 		});
+		$("body").delegate(".btn-primary","click",function(e){
+			var parent = this.parentNode;
+			$(parent).hide();
+		})
 	})();
 </script>
 </body>
