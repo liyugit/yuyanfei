@@ -4,8 +4,16 @@ class GetData extends CI_Controller {
 	public function index()
 	{
 	$debug = $this->input->get("debug");
-	$postStr = file_get_contents('static/js/data/zhihu_movie.js');
-	$postStr = strip_tags($postStr);
+	$type = $this->input->get("type");
+	if($type){
+		$type = intval($type);
+	}
+	else{
+		$type = 1;
+	}
+	$fileNameArray = array("zhihu_movie.js","zhihu_movie.js","zhihu_football.js","zhihu_mall.js","zhihu_money.js","zhihu_person.js");
+	$postStr = file_get_contents('static/js/data/'.$fileNameArray[$type]);
+	//$postStr = strip_tags($postStr);
 	//$postStr = file_get_contents('http://localhost/yuyanfei/static/js/item.js');
 	$res = json_decode($postStr,true);
 	$result = array();
@@ -15,13 +23,18 @@ class GetData extends CI_Controller {
 		$content = $item["item-content"];
 		$contArray = array();
 		foreach ($content as $key => $cont) {
+			$contstr = strip_tags($cont);
+			$contstr = trim($contstr);
+			if(strlen($contstr)<=0){
+				continue;
+			}
 			$cnt = array();
-			if(strlen($cont)>50){
+			if(strlen($contstr)>50){
 				//echo mb_substr($cont,0,50);
-				$cnt["sun"] =  mb_substr($cont,0,50).".....";
+				$cnt["sun"] =  mb_substr($contstr,0,50).".....";
 			}
 			else{
-				$cnt["sun"] = $cont;
+				$cnt["sun"] = $contstr;
 			}
 			$cnt["detail"] = $cont;
 			array_push($contArray,$cnt);
@@ -35,6 +48,7 @@ class GetData extends CI_Controller {
 		echo(json_encode($result));
 		exit;
 	}
+	$this->smarty->assign("type",$type);
 	$this->smarty->assign("list",$result);
 	$this->smarty->display("page.tpl");
 	}
