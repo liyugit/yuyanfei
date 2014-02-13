@@ -1,6 +1,21 @@
 <?php
-class GetData extends CI_Controller {
-	
+class GetData extends CI_Controller 
+{	 
+	 private function strip($str){
+		$farr = array( 
+		//"/\s+/", //过滤多余空白 
+		//过滤 <script>等可能引入恶意内容或恶意改变显示布局的代码,如果不需要插入flash等,还可以加入<object>的过滤 
+		"/(<|\&lt\;)(\/?)(script|i?frame|style|html|body|title|link|meta|\?|\%)(>|\&gt\;)/isU", 
+		"/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU",//过滤javascript的on事件 
+		); 
+		$tarr = array( 
+		//" ", 
+		" ",//如果要直接清除不安全的标签，这里可以留空 
+		" ", 
+		); 
+		$str = preg_replace( $farr,$tarr,$str); 
+		return $str; 
+	}	
 	public function index()
 	{
 	$debug = $this->input->get("debug");
@@ -23,8 +38,11 @@ class GetData extends CI_Controller {
 		$content = $item["item-content"];
 		$contArray = array();
 		foreach ($content as $key => $cont) {
-			$contstr = strip_tags($cont);
-			$contstr = trim($contstr);
+			$contstr = trim(strip_tags($cont));
+			$contstrip = $this->strip($cont);
+			if($contstrip !== $cont){
+				continue;
+			}
 			if(strlen($contstr)<=0){
 				continue;
 			}
@@ -36,7 +54,11 @@ class GetData extends CI_Controller {
 			else{
 				$cnt["sun"] = $contstr;
 			}
-			$cnt["detail"] = $cont;
+			// if($key == 92){
+			// 	//echo $this->strip($cont);
+			// }
+			$cnt["sun"] = $this->strip($cnt["sun"]);
+			$cnt["detail"] = $this->strip($cont);
 			array_push($contArray,$cnt);
 		}
 		$it["content"] =  json_encode($contArray);

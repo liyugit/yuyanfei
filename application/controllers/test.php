@@ -16,6 +16,21 @@ class Test extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+	private function strip($str){
+		$farr = array( 
+		"/\s+/", //过滤多余空白 
+		//过滤 <script>等可能引入恶意内容或恶意改变显示布局的代码,如果不需要插入flash等,还可以加入<object>的过滤 
+		"/(<|\&lt\;)(\/?)(script|i?frame|style|html|body|title|link|meta|\?|\%)(>|\&gt\;)/isU", 
+		"/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU",//过滤javascript的on事件 
+		); 
+		$tarr = array( 
+		" ", 
+		" ",//如果要直接清除不安全的标签，这里可以留空 
+		" ", 
+		); 
+		$str = preg_replace( $farr,$tarr,$str); 
+		return $str; 
+	}
 	public function index()
 	{
 		$t = "".time();	
@@ -29,7 +44,11 @@ class Test extends CI_Controller {
 		//echo "token:".$token;
 		//echo "<br/>time:".$t."<br/>rand:".$r."<br/>result:".$tmpStr;
 		$apppath =  APPPATH;
-		$this->smarty->assign("apppath",$apppath);
-		$this->smarty->display("test.tpl");
+		//$this->smarty->assign("apppath",$apppath);
+		//$this->smarty->display("test.tpl");
+		
+		$str = '<div class="zm-editable-content clearfix">&lt;script&gt;alert("test")&lt;/script&gt;</div>';
+		//echo $str;
+		echo $this->strip($str);
 	}
 }

@@ -4,21 +4,21 @@
     <title>mobile</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width",height="device-height" name="viewport" />
-	<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
-	<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="static/css/bootstrap.css">
+	<link rel="stylesheet" href="static/css/bootstrap-theme.css">
 	<style type="text/css">
 
 	body,html{
 		height: 100%;
 	}
 	body{
-		padding-top: 40px;
+		padding-top: 51px;
 	}
 	.comment-page,
 	.detail-page{
 		position: absolute;
 		left: 0;
-		top: 40px;
+		top: 51px;
 		width: 100%;
 		min-height: 100%;
 		background: #fff;
@@ -55,39 +55,40 @@
 		padding-right: 54px;
 		font-weight: bold;
 	}
-	.toggle-expand{
-		display: none;
-	}
-	#nav{
-		background: #428BCA;
+	.navbar {
 		position: fixed;
+		margin-bottom: -1px;
 		top: 0;
 		left: 0;
 		width: 100%;
 		z-index: 100;
 	}
-	#nav a{
-		color: #fff;
-	}
-	#nav a:hover{
-		background: #0D77E4;
-	}
-	#nav .active a{
-		background: #0D77E4;
-	}
 	</style>
 </head>
 <body>
-<ul id="nav" class="nav nav-pills">
-  <li class="{if $type == 1}active{/if}">
-    <a href="?type=1">电影</a>
-  </li>
-  <li class="{if $type == 2}active{/if}"><a href="?type=2">足球</a></li>
-  <li class="{if $type == 3}active{/if}"><a href="?type=3">电子商务</a></li>
-  <li class="{if $type == 4}active{/if}"><a href="?type=4">投资</a></li>
-  <li class="{if $type == 5}active{/if}"><a href="?type=5">个人情感</a></li>
-  <li></li>
-</ul>
+{strip}	
+<nav class="navbar navbar-default" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav">
+	      <span class="sr-only">Toggle navigation</span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	    </button>
+	    <a class="navbar-brand" href="#">趣味问答</a>
+	</div>
+	<div class="collapse navbar-collapse" id="nav">
+		<ul class="nav navbar-nav">
+			<li class="{if $type == 1}active{/if}">
+		    <a href="?type=1">电影</a>
+		  </li>
+		  <li class="{if $type == 2}active{/if}"><a href="?type=2">足球</a></li>
+		  <li class="{if $type == 3}active{/if}"><a href="?type=3">电子商务</a></li>
+		  <li class="{if $type == 4}active{/if}"><a href="?type=4">投资</a></li>
+		  <li class="{if $type == 5}active{/if}"><a href="?type=5">个人情感</a></li>
+		</ul>
+	</div>
+</nav>
 <ul  id="aticleList" class="list aticle-list list-group">
 	{foreach $list as $item}
 	<li class="list-group-item" title-str="{$item.title}">{$item.title}
@@ -112,10 +113,9 @@
   		</div>
 	</div>
 </div>
-<div id="debug">
-</div>
+{/strip}
 <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
-<script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="static/js/bootstrap.js"></script>
 <script type="text/javascript">
 	(function(){
 		var aticleList = $("#aticleList"),
@@ -128,9 +128,14 @@
 				var data = jQuery.parseJSON(me.find(".data").val()),
 				result = [],
 				title = me.attr("title-str");
+				//debugger;
 				result.push('<li class="list-group-item"><h1 class="title">' + title + '</h1></li>');
 				$(data).each(function(i,d){
 					result.push('<li class="list-group-item comment" title-str="' + title + '">');
+					if(/.+?script.+?/.test(d.title)){
+						debugger;
+						console.log(d.detail);
+					}
 					result.push('<textarea style="display:none">' + d.detail + '</textarea>');
 					result.push(d.sun + '</li>');
 				});
