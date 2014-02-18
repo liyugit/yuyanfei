@@ -118,6 +118,7 @@ class MySQL {
 	
 	// Executes MySQL query
 	function ExecuteSQL($query){
+		mysql_query("SET NAMES 'utf8'"); //设置数据的编码
 		$this->lastQuery 	= $query;
 		if($this->result 	= mysql_query($query, $this->databaseLink)){
 			$this->records 	= @mysql_num_rows($this->result);
@@ -131,6 +132,7 @@ class MySQL {
                         }
 			
 		}else{
+			echo mysql_error($this->databaseLink);
 			$this->lastError = mysql_error($this->databaseLink);
 			return false;
 		}

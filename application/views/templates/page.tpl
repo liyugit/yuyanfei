@@ -69,14 +69,17 @@
 {strip}	
 <nav class="navbar navbar-default" role="navigation">
 	<div class="navbar-header">
+		<!--
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav">
 	      <span class="sr-only">Toggle navigation</span>
 	      <span class="icon-bar"></span>
 	      <span class="icon-bar"></span>
 	      <span class="icon-bar"></span>
 	    </button>
+	     -->
 	    <a class="navbar-brand" href="#">趣味问答</a>
 	</div>
+	<!--
 	<div class="collapse navbar-collapse" id="nav">
 		<ul class="nav navbar-nav">
 			<li class="{if $type == 1}active{/if}">
@@ -88,11 +91,15 @@
 		  <li class="{if $type == 5}active{/if}"><a href="?type=5">个人情感</a></li>
 		</ul>
 	</div>
+	-->
 </nav>
 <ul  id="aticleList" class="list aticle-list list-group">
 	{foreach $list as $item}
-	<li class="list-group-item" title-str="{$item.title}">{$item.title}
-		<textarea class="data" style="display:none">{$item.content}</textarea>
+	<li class="list-group-item">
+		<h3 class="qustion" lid="{$item.id}" title-str="{$item.title}">{$item.content}</h3>
+		<div class="best-answer">
+			{$item.best}
+		</div>
 	</li>
 	{/foreach}
 </ul>

@@ -16,25 +16,32 @@ class SaveData extends CI_Controller
 		$str = preg_replace( $farr,$tarr,$str); 
 		return $str; 
 	}
-	public function index()
-	{
+	private function connectDB(){
 		$mySQL = new MySQL();
 		$mySQL->setConfig('youwei','root','');
+		return $mySQL;
+	}
+	public function getCount(){
+		$mySQL = $this->connectDB();	
+		$cont = $mySQL->ExecuteSQL('select COUNT(*) as totalcount from `list`');
+		print_r($cont);
+	}	
+	public function index()
+	{
+		$mySQL = $this->connectDB();	
 		$id = 1;
 		$sid = 1;
 		$did = 1;
-		$fileNameArray = array("zhihu_movie.js","zhihu_movie.js","zhihu_football.js","zhihu_mall.js","zhihu_money.js","zhihu_person.js");
+		$fileNameArray = array("zhihu_football.js","zhihu_mall.js","zhihu_money.js","zhihu_person.js");
 		$postStr = file_get_contents('static/js/data/'.$fileNameArray[2]);
 		$res = json_decode($postStr,true);
 		foreach ($res as $key => $item) {
 			$it = array();
 			$it["id"] = $id;
-			$it["title"] = $item["title"];
+			$it["content"] = $item["title"];
 			$it["hot"] = 0;
-			//print_r($it);
 			$mySQL->Insert($it,"list");
 			$content = $item["item-content"];
-			$id++;
 			foreach ($content as $key => $cont) {
 				$contstr = trim(strip_tags($cont));
 				$contstrip = $this->strip($cont);
@@ -44,7 +51,6 @@ class SaveData extends CI_Controller
 				if(strlen($contstr)<=0){
 					continue;
 				}
-				
 				if(strlen($contstr)>50){
 					$sun =  mb_substr($contstr,0,50).".....";
 				}
@@ -57,17 +63,17 @@ class SaveData extends CI_Controller
 				$sub["id"] = $sid;
 				$sub["content"] = $sun;
 				$sub["lid"] = $id;
-				//$mySQL->Insert($sub,"sub");
+				$mySQL->Insert($sub,"sub");
 				$detail["id"] = $did;
 				$detail["content"] = $this->strip($cont);
 				$detail["sid"] = $sid;
-				//$mySQL->Insert($detail,"detail");
+				$mySQL->Insert($detail,"detail");
 				$sid++;
 				$did++;
 			}
-
+			$id++;
 		}
-		print_r($mySQL->Select('list'));	
+		//print_r($mySQL->Select('list'));	
 	}
 }
 ?>
