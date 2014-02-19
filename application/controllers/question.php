@@ -47,4 +47,22 @@ class Question extends CI_Controller
 	$this->smarty->assign("list",$result);
 	$this->smarty->display("question.tpl");
 	}
+	public function getSubList(){
+		$lid = $this->input->get("lid");
+		$mySQL = $this->connectDB();
+		$listSQL = 	"SELECT  * FROM `sub` WHERE lid = ".$lid;
+		$list = $mySQL->ExecuteSQL($listSQL);
+		header("Content-type:application/json");
+		echo(json_encode($list));
+		exit;
+	} 
+	public function getDetail(){
+		$sid = $this->input->get("sid");
+		$mySQL = $this->connectDB();
+		$detailSQL = 	"SELECT  * FROM `detail` WHERE sid = ".$sid;
+		$detail = $mySQL->ExecuteSQL($detailSQL);
+		header("Content-type:application/json");
+		echo(json_encode($detail));
+		exit;
+	}
 }
