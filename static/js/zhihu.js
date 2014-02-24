@@ -44,11 +44,14 @@ var urlArray = [
     fileName:"zhihu_money.js",
   }
  ];
-var fileName = urlArray[4].fileName;
-var url = urlArray[4].url;
-var result = {};
-var deferred = when.defer();
-var getList = function(){
+var fileNamePre = "zhihu_q_a",
+    fileName,
+    urlPre = "http://www.zhihu.com/topic/19569420/top-answers?page=",
+    url,
+    result = {},
+    deferred = when.defer();
+var getList = function(url,fileName){
+     //console.log(fileName);
     download(url, function(data) {
   if (data) {
       //console.log(data);
@@ -62,12 +65,13 @@ var getList = function(){
         itemObj["detail"] = detailUrl;  
         result["item" + i] = itemObj;
       });
-       deferred.resolve();
+       //console.log(fileName);
+       deferred.resolve(fileName);
     }
   });
     return deferred.promise;
 };
-var getItem = function(item){
+var getItem = function(item,fileName){
     var detailUrl = item["detail"],
         deferred = when.defer();
     download(detailUrl,function(data){
@@ -79,18 +83,21 @@ var getItem = function(item){
       $(".zm-item-answer").each(function(i,dom){
           item["item-content"].push($(dom).find(".zm-item-rich-text").html());
       });
-      deferred.resolve();
+      //console.log(fileName);
+      deferred.resolve(fileName);
     });
     return deferred.promise;
 };
-var getDetail = function(){
+var getDetail = function(fileName){
+  console.log(fileName);
   var deferreds = [];
-  for(var i in result){
-      deferreds.push(getItem(result[i]));    
+  for(var i in result){   
+      deferreds.push(getItem(result[i],fileName));    
   }
   return deferreds;
 };
-var writeFile = function(){
+var writeFile = function(fileName){
+  //console.log(fileName);
   var content = querystring.stringify(result);
   // var options = {
   //   host:"localhost",
@@ -110,8 +117,17 @@ var writeFile = function(){
   // });
   // req.write(content);
   // req.end();
+
   fs.writeFile(fileName,JSON.stringify(result));
   //fs.writeFile("zhihu_movie.js",content);
 
 }
-when.all(getList().then(getDetail)).then(writeFile);
+var arr = new Array(5),
+    arrLen = arr.length;
+for(var page = 1; page <= arrLen; page++){
+  url = urlPre + page;
+  fileName = fileNamePre + page + ".js"; 
+  //console.log(url);
+  //console.log(fileName);
+  when.all(getList(url,fileName).then(getDetail)).then(writeFile);
+}
