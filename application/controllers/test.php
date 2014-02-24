@@ -51,4 +51,10 @@ class Test extends CI_Controller {
 		//echo $str;
 		echo $this->strip($str);
 	}
+	public function test(){
+		$arr = range(1,15);
+		foreach ($arr as $key => $value) {
+			echo $value;
+		}
+	}
 }

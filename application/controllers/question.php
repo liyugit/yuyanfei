@@ -23,7 +23,7 @@ class Question extends CI_Controller
 	//随机读取list表里面一条数据
 	$mySQL = $this->connectDB();
 	$randomSQL = "SELECT * FROM `list` AS t1 JOIN (SELECT FLOOR(RAND() * (SELECT MAX(id) FROM `list`)) AS id) AS t2 WHERE t1.id >= t2.id ORDER BY t1.id ASC LIMIT 1";
-	$arrayLen = 5;
+	$arrayLen = 10;
 	$res = array();
 	$result = array();
 	$nub = range(1,$arrayLen);
