@@ -1,14 +1,15 @@
 <?php
 class ImgResize extends CI_Controller {
-	private function my_image_resize($src_file, $dst_file, $dst_width=32, $dst_height=32){ 
+	private function my_image_resize($src_file, $dst_width=32, $dst_height=32){ 
+		$result = "";
 		if($dst_width <1 || $dst_height <1) { 
 			echo "params width or height error !"; 
 			exit(); 
 		} 
-		if(!file_exists($src_file)) { 
-			echo $src_file . " is not exists !"; 
-			exit(); 
-		} 
+		// if(!file_exists($src_file)) { 
+		// 	echo $src_file . " is not exists !"; 
+		// 	exit(); 
+		// } 
 		$type=exif_imagetype($src_file); 
 		$support_type=array(IMAGETYPE_JPEG , IMAGETYPE_PNG , IMAGETYPE_GIF); 
 		if(!in_array($type, $support_type,true)) { 
@@ -37,16 +38,16 @@ class ImgResize extends CI_Controller {
 			$x = ($dst_width-$src_w)/2; 
 			$y = ($dst_height-$src_h)/2; 
 			$new_img=imagecreatetruecolor($dst_width,$dst_height); 
-			imagecopy($new_img,$src_img,$x,$y,0,0,$dst_width,$dst_height); 
+			imagecopyresampled($new_img,$src_img,0,0,0,0,$dst_width,$dst_height,$src_w,$src_h); 
 			switch($type) { 
 				case IMAGETYPE_JPEG : 
-				imagejpeg($new_img,$dst_file,100); 
+				$result = imagejpeg($new_img); 
 				break; 
 				case IMAGETYPE_PNG : 
-				imagepng($new_img,$dst_file); 
+				$result = imagepng($new_img); 
 				break; 
 				case IMAGETYPE_GIF : 
-				imagegif($new_img,$dst_file); 
+				$result = imagegif($new_img); 
 				break; 
 				default: 
 				break; 
@@ -64,28 +65,43 @@ class ImgResize extends CI_Controller {
 			} 
 			$zoom_img=imagecreatetruecolor($zoom_w, $zoom_h); 
 			imagecopyresampled($zoom_img,$src_img,0,0,0,0,$zoom_w,$zoom_h,$src_w,$src_h); 
-			$new_img=imagecreatetruecolor($dst_width,$dst_height); 
-			$x = ($dst_width-$zoom_w)/2; 
-			$y = ($dst_height-$zoom_h)/2+1; 
-			imagecopy($new_img,$zoom_img,$x,$y,0,0,$dst_width,$dst_height); 
+			// $new_img=imagecreatetruecolor($dst_width,$dst_height); 
+			// $x = ($dst_width-$zoom_w)/2; 
+			// $y = ($dst_height-$zoom_h)/2+1; 
+			// imagecopy($new_img,$zoom_img,$x,$y,0,0,$dst_width,$dst_height); 
 			switch($type) { 
 				case IMAGETYPE_JPEG : 
-				imagejpeg($new_img,$dst_file,100); 
+				$result = imagejpeg($zoom_img); 
 				break; 
 				case IMAGETYPE_PNG : 
-				imagepng($new_img,$dst_file); 
+				$result = imagepng($zoom_img); 
 				break; 
 				case IMAGETYPE_GIF : 
-				imagegif($new_img,$dst_file); 
+				$result = imagegif($zoom_img); 
 				break; 
 				default: 
 				break; 
 			} 
 		} 
+		return $result;
 	} 
+	public function setImage(){
+		$url = $this->input->get("url");
+		$w = $this->input->get("w");
+		$h = $this->input->get("h");
+		$this->my_image_resize($url,$w,$h);
+	}
 	public function index()
 	{
 		
-
+		// if (exif_imagetype("http://p1.qhimg.com/t01a2fa376b89a8bf46.gif") != IMAGETYPE_GIF) {
+  // 		  echo "The picture is not a gif";
+		// }
+		// else{
+		// 	echo "ok";
+		// }
+		//header("Content-type:image/gif");
+		//$this->smarty->assign("stream",$this->my_image_resize("http://p1.qhimg.com/t01a2fa376b89a8bf46.gif",130,100));
+		$this->smarty->display("test.tpl");
 	}
 }
