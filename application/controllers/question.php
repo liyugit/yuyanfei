@@ -2,9 +2,9 @@
 class Question extends CI_Controller 
 {	
 	private function connectDB(){
-		$mySQL = new MySQL();
-		$mySQL->setConfig('youwei','root','');
-		return $mySQL;
+		$this->load->library('MySQL');
+		$this->mysql->setConfig('youwei','root','');
+		return $this->mysql;
 	} 	
 	public function index()
 	{
@@ -21,19 +21,19 @@ class Question extends CI_Controller
 	//$postStr = strip_tags($postStr);
 	//$postStr = file_get_contents('http://localhost/yuyanfei/static/js/item.js');
 	//随机读取list表里面一条数据
-	$mySQL = $this->connectDB();
+	$this->connectDB();
 	$randomSQL = "SELECT * FROM `list` AS t1 JOIN (SELECT FLOOR(RAND() * (SELECT MAX(id) FROM `list`)) AS id) AS t2 WHERE t1.id >= t2.id ORDER BY t1.id ASC LIMIT 1";
 	$arrayLen = 10;
 	$res = array();
 	$result = array();
 	$nub = range(1,$arrayLen);
 	foreach ($nub as $key => $value) {
-		array_push($res, $mySQL->ExecuteSQL($randomSQL)); 
+		array_push($res, $this->mysql->ExecuteSQL($randomSQL)); 
 	}
 	foreach ($res as $item) {
 		$id = $item["id"];
 		$bestSQL = "SELECT  * FROM `sub` WHERE lid = ".$id ." LIMIT 1";
-		$bestQustion = $mySQL->ExecuteSQL($bestSQL);
+		$bestQustion = $this->mysql->ExecuteSQL($bestSQL);
 		$item["best"] = $bestQustion;
 		array_push($result, $item);
 	}
@@ -49,18 +49,18 @@ class Question extends CI_Controller
 	}
 	public function getSubList(){
 		$lid = $this->input->get("lid");
-		$mySQL = $this->connectDB();
-		$listSQL = 	"SELECT  * FROM `sub` WHERE lid = ".$lid;
-		$list = $mySQL->ExecuteSQL($listSQL);
+		$this->connectDB();
+		$listSQL = "SELECT  * FROM `sub` WHERE lid = ".$lid;
+		$list = $this->mysql->ExecuteSQL($listSQL);
 		header("Content-type:application/json");
 		echo(json_encode($list));
 		exit;
 	} 
 	public function getDetail(){
 		$sid = $this->input->get("sid");
-		$mySQL = $this->connectDB();
-		$detailSQL = 	"SELECT  * FROM `detail` WHERE sid = ".$sid;
-		$detail = $mySQL->ExecuteSQL($detailSQL);
+		$this->connectDB();
+		$detailSQL = "SELECT  * FROM `detail` WHERE sid = ".$sid;
+		$detail = $this->mysql->ExecuteSQL($detailSQL);
 		header("Content-type:application/json");
 		echo(json_encode($detail));
 		exit;

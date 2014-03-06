@@ -147,7 +147,6 @@ if (defined('ENVIRONMENT'))
 
 	// ensure there's a trailing slash
 	$system_path = rtrim($system_path, '/').'/';
-
 	// Is the system path correct?
 	if ( ! is_dir($system_path))
 	{
@@ -167,14 +166,13 @@ if (defined('ENVIRONMENT'))
 	define('EXT', '.php');
 
 	// Path to the system folder
-	define('BASEPATH', str_replace("\\", "/", $system_path));
 
+	define('BASEPATH', str_replace("\\", "/", $system_path));
 	// Path to the front controller (this file)
 	define('FCPATH', str_replace(SELF, '', __FILE__));
 
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
-
 
 	// The path to the "application" folder
 	if (is_dir($application_folder))
