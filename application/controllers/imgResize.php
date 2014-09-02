@@ -86,6 +86,7 @@ class ImgResize extends CI_Controller {
 		return $result;
 	} 
 	public function setImage(){
+		$this->output->set_header("Content-Type:image/jpeg");	
 		$url = $this->input->get("url");
 		$w = $this->input->get("w");
 		$h = $this->input->get("h");
